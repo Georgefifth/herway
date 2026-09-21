@@ -96,15 +96,25 @@ const Data = (() => {
     return out;
   }
 
+  const OVERPASS_MIRRORS = [
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter",
+  ];
+
   async function fetchHavens(city, bounds) {
     const q = `[out:json][timeout:8];(
       node[amenity~"police|hospital|pharmacy|fuel"](${bounds.join(",")});
       node[shop~"convenience"](${bounds.join(",")});
     );out 40;`;
-    const url = "https://overpass-api.de/api/interpreter?data=" + encodeURIComponent(q);
-    const res = await fetch(url);
-    if (!res.ok) throw new Error("overpass " + res.status);
-    const j = await res.json();
+    let j = null;
+    for (const mirror of OVERPASS_MIRRORS) {
+      try {
+        const res = await fetch(mirror + "?data=" + encodeURIComponent(q),
+          { signal: AbortSignal.timeout ? AbortSignal.timeout(10000) : undefined });
+        if (res.ok) { j = await res.json(); break; }
+      } catch (e) { /* try next mirror */ }
+    }
+    if (!j) throw new Error("all overpass mirrors failed");
     const out = [];
     for (const el of j.elements || []) {
       const t = el.tags || {};
