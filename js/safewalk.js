@@ -206,5 +206,6 @@ const SafeWalk = (() => {
     };
   }
 
-  return { init, start, close, showSOS, isOpen: () => !document.getElementById("safeWalk").hidden };
+  return { init, start, close, showSOS, toast,
+           isOpen: () => !document.getElementById("safeWalk").hidden };
 })();

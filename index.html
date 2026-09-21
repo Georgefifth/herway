@@ -29,7 +29,7 @@
         <option value="london">London</option>
         <option value="mumbai">Mumbai</option>
         <option value="singapore">Singapore</option>
-        <option value="custom" disabled>My location…</option>
+        <option value="custom">📍 My location</option>
       </select>
     </label>
 
@@ -105,6 +105,7 @@
   <!-- ══════════ Map ══════════ -->
   <main id="mapWrap">
     <div id="map"></div>
+    <button id="btnLocate" class="locate-btn" title="Jump to my location">⌖</button>
     <button id="btnSOS" class="sos-btn" title="Open Safe Walk companion">Safe&nbsp;Walk</button>
     <div id="pickBanner" class="pick-banner" hidden>Click the map to set <b id="pickTarget"></b> — <button id="pickCancel">cancel</button></div>
     <div id="datasetChip" class="dataset-chip" title="Demo dataset: procedural model + community reports. Production fuses OSM, city open data and live reports.">demo data</div>

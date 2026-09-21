@@ -53,14 +53,48 @@
   }
   slider.addEventListener("input", applyHour);
 
-  /* ─────────── city selector ─────────── */
-  $("citySelect").addEventListener("change", async (e) => {
-    state.city = Data.city(e.target.value);
+  /* ─────────── city selector + geolocation ─────────── */
+  function switchCity(c) {
+    state.city = c;
     state.routes = []; state.from = state.to = null;
-    map.setView(state.city.center, state.city.zoom);
+    map.setView(c.center, c.zoom);
     MapView.setEndpoints(null, null, onEndpointDrag);
     refreshAll();
     loadHavens();
+  }
+
+  function locateMe() {
+    const btn = $("btnLocate");
+    if (!navigator.geolocation) {
+      SafeWalk.toast("Geolocation not supported by this browser");
+      return;
+    }
+    btn.classList.add("busy");
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        btn.classList.remove("busy");
+        const ll = [pos.coords.latitude, pos.coords.longitude];
+        switchCity(Data.customCity(ll[0], ll[1]));
+        $("citySelect").value = "custom";
+        MapView.markYou(ll);
+        SafeWalk.toast("Located — safety model recalibrated to your area (demo)");
+      },
+      (err) => {
+        btn.classList.remove("busy");
+        $("citySelect").value = state.city.key;
+        SafeWalk.toast({
+          1: "Location permission denied — allow it in the browser address bar",
+          2: "Position unavailable — check your device's location service",
+          3: "Location request timed out — try again",
+        }[err.code] || "Could not get your location");
+      },
+      { timeout: 10000, maximumAge: 60000 });
+  }
+
+  $("btnLocate").onclick = locateMe;
+  $("citySelect").addEventListener("change", (e) => {
+    if (e.target.value === "custom") { locateMe(); return; }
+    switchCity(Data.city(e.target.value));
   });
 
   /* ─────────── endpoints ─────────── */
@@ -320,8 +354,13 @@
     map.invalidateSize();
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (pos) => map.setView([pos.coords.latitude, pos.coords.longitude], 15),
-        () => {}, { timeout: 3000 });
+        (pos) => {
+          const ll = [pos.coords.latitude, pos.coords.longitude];
+          switchCity(Data.customCity(ll[0], ll[1]));
+          $("citySelect").value = "custom";
+          MapView.markYou(ll);
+        },
+        () => {}, { timeout: 4000 });
     }
   };
 

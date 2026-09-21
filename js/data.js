@@ -159,5 +159,18 @@ const Data = (() => {
     return c;
   }
 
-  return { CELL, CITIES, HAVEN_TYPES, REPORT_DELTA, factors, city, fetchHavens, syntheticHavens, seedReports, hash2 };
+  /* ad-hoc city for geolocated users — seed derived from coords so the
+     procedural model stays deterministic at the same place */
+  function customCity(lat, lng) {
+    const seed = 101 + (Math.abs(Math.round(lat * 37) + Math.round(lng * 91)) % 887);
+    const c = {
+      name: "My location", key: "custom", center: [lat, lng], zoom: 15, seed,
+      demo: [[lat + 0.007, lng - 0.005], [lat - 0.007, lng + 0.005]],
+      emergency: [["112", "International emergency"], ["911", "US / Canada"]],
+      hotspots: hotspots(seed),
+    };
+    return c;
+  }
+
+  return { CELL, CITIES, HAVEN_TYPES, REPORT_DELTA, factors, city, customCity, fetchHavens, syntheticHavens, seedReports, hash2 };
 })();

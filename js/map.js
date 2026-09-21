@@ -124,6 +124,17 @@ const MapView = (() => {
     map.fitBounds(L.latLngBounds(coords), { padding: [40, 40] });
   }
 
-  return { init, drawHeat, drawRoutes, setEndpoints, drawHavens, drawReports, toggleLayer, fitBounds,
+  /* pulsing "you are here" dot */
+  let youMarker = null;
+  function markYou(latlng) {
+    if (youMarker) map.removeLayer(youMarker);
+    youMarker = L.marker(latlng, {
+      icon: L.divIcon({ className: "", html: `<div class="you-here"></div>`,
+                        iconSize: [18, 18], iconAnchor: [9, 9] }),
+    }).addTo(map).bindTooltip("You are here");
+    map.setView(latlng, Math.max(map.getZoom(), 15));
+  }
+
+  return { init, drawHeat, drawRoutes, setEndpoints, drawHavens, drawReports, toggleLayer, fitBounds, markYou,
            get map() { return map; } };
 })();
