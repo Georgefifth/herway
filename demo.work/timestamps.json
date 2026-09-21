@@ -1,0 +1,197 @@
+[
+  {
+    "idx": 0,
+    "name": "title",
+    "file": "/home/yap/Hack/Acodemic/demo.work/raw/scene-00.webm",
+    "wallMs": 5260,
+    "focus": []
+  },
+  {
+    "idx": 1,
+    "name": "hook",
+    "file": "/home/yap/Hack/Acodemic/demo.work/raw/scene-01.webm",
+    "wallMs": 7668,
+    "focus": []
+  },
+  {
+    "idx": 2,
+    "name": "map",
+    "session": "app",
+    "focus": [
+      {
+        "t": 0.89,
+        "x": 960,
+        "y": 691
+      }
+    ],
+    "file": "/home/yap/Hack/Acodemic/demo.work/raw/session-app.webm",
+    "range": [
+      0,
+      4.72
+    ]
+  },
+  {
+    "idx": 3,
+    "name": "routes",
+    "session": "app",
+    "focus": [
+      {
+        "t": 0.43,
+        "x": 160,
+        "y": 326
+      }
+    ],
+    "file": "/home/yap/Hack/Acodemic/demo.work/raw/session-app.webm",
+    "range": [
+      4.72,
+      11.17
+    ]
+  },
+  {
+    "idx": 4,
+    "name": "time",
+    "session": "app",
+    "focus": [
+      {
+        "t": 0.38,
+        "x": 1461,
+        "y": 28
+      },
+      {
+        "t": 2.37,
+        "x": 1461,
+        "y": 28
+      }
+    ],
+    "file": "/home/yap/Hack/Acodemic/demo.work/raw/session-app.webm",
+    "range": [
+      11.17,
+      16.96
+    ]
+  },
+  {
+    "idx": 5,
+    "name": "model",
+    "session": "app",
+    "focus": [],
+    "file": "/home/yap/Hack/Acodemic/demo.work/raw/session-app.webm",
+    "range": [
+      23.21,
+      30.38
+    ]
+  },
+  {
+    "idx": 6,
+    "name": "report",
+    "session": "app",
+    "focus": [
+      {
+        "t": 0.44,
+        "x": 160,
+        "y": 1047
+      },
+      {
+        "t": 0.94,
+        "x": 850,
+        "y": 461
+      },
+      {
+        "t": 1.91,
+        "x": 1113,
+        "y": 684
+      }
+    ],
+    "file": "/home/yap/Hack/Acodemic/demo.work/raw/session-app.webm",
+    "range": [
+      30.38,
+      35.51
+    ]
+  },
+  {
+    "idx": 7,
+    "name": "safewalk",
+    "session": "app",
+    "focus": [
+      {
+        "t": 0.45,
+        "x": 1841,
+        "y": 1030
+      }
+    ],
+    "file": "/home/yap/Hack/Acodemic/demo.work/raw/session-app.webm",
+    "range": [
+      35.51,
+      45.63
+    ]
+  },
+  {
+    "idx": 8,
+    "name": "sos",
+    "session": "app",
+    "focus": [],
+    "file": "/home/yap/Hack/Acodemic/demo.work/raw/session-app.webm",
+    "range": [
+      45.63,
+      51.15
+    ]
+  },
+  {
+    "idx": 9,
+    "name": "fakecall",
+    "session": "app",
+    "focus": [
+      {
+        "t": 0.45,
+        "x": 960,
+        "y": 728
+      },
+      {
+        "t": 0.96,
+        "x": 862,
+        "y": 707
+      },
+      {
+        "t": 3.42,
+        "x": 1054,
+        "y": 696
+      },
+      {
+        "t": 6.69,
+        "x": 960,
+        "y": 729
+      },
+      {
+        "t": 7.76,
+        "x": 1137,
+        "y": 339
+      }
+    ],
+    "file": "/home/yap/Hack/Acodemic/demo.work/raw/session-app.webm",
+    "range": [
+      51.15,
+      59.91
+    ]
+  },
+  {
+    "idx": 10,
+    "name": "roadmap",
+    "session": "app",
+    "focus": [],
+    "file": "/home/yap/Hack/Acodemic/demo.work/raw/session-app.webm",
+    "range": [
+      67.39,
+      75.06
+    ]
+  },
+  {
+    "idx": 11,
+    "name": "cta",
+    "session": "app",
+    "focus": [],
+    "file": "/home/yap/Hack/Acodemic/demo.work/raw/session-app.webm",
+    "range": [
+      75.06,
+      80.72
+    ]
+  }
+]

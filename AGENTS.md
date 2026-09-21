@@ -57,6 +57,23 @@ js/safewalk.js    "Walk With Me" companion: simulated trip, check-ins,
 js/app.js         UI wiring, state, geocoding, city selector
 ```
 
+## Demo video (demo.mp4)
+
+Produced by `~/tools/demo-recorder` — scene spec: `~/tools/demo-recorder/scenes/herway.js`.
+
+```bash
+cd ~/tools/demo-recorder
+node record-demo.js scenes/herway.js --out=/home/yap/Hack/Acodemic/demo.mp4
+```
+
+- Narrative slides live in Figma file `pHHhMPNGFezhSBlCUCvhyo`
+  (frames `8:2` hook / `8:8` model / `8:29` roadmap) — pulled via `card.figma`
+  REST (`FIGMA_TOKEN` in env). Edit slides in Figma web/app, re-run to refresh.
+- HTML source of the same slides: `assets/slides.html` → re-shoot with
+  `node ~/tools/demo-recorder/tools/frames.js assets/slides.html` in assets/.
+- Live scenes share `session: "app"` — one continuous page, cards overlay it.
+- Intermediates land in `demo.work/` (timestamps.json, raw webms, segments).
+
 ## Conventions
 
 - Keep it dependency-free; CDN <script> tags only (Leaflet).

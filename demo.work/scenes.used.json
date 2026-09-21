@@ -1,0 +1,419 @@
+[
+  {
+    "name": "title",
+    "duration": 4,
+    "card": {
+      "preset": "dark-premium",
+      "accent": "#a78bfa",
+      "title": "HerWay",
+      "kicker": "Acodemic × G.I.R.L.S. · Global SDG Hackathon",
+      "sub": "Not the fastest way home — the safest one",
+      "foot": "SDG 5 · SDG 11"
+    },
+    "vo": "HerWay. Not the fastest way home — the safest one."
+  },
+  {
+    "name": "hook",
+    "duration": 6,
+    "card": {
+      "figma": {
+        "file": "pHHhMPNGFezhSBlCUCvhyo",
+        "node": "8:2",
+        "scale": 2
+      }
+    },
+    "vo": "Nine in ten women say street harassment shapes how they walk home — and most route planners only optimize for speed. HerWay optimizes for something else."
+  },
+  {
+    "name": "map",
+    "session": "app",
+    "url": "https://herway-tau.vercel.app/",
+    "actions": [
+      {
+        "type": "waitFor",
+        "sel": "#splashGo",
+        "__focus": null
+      },
+      {
+        "type": "click",
+        "sel": "#splashGo",
+        "__focus": [
+          959.9921875,
+          691.3125
+        ]
+      },
+      {
+        "type": "wait",
+        "ms": 3200,
+        "__focus": null
+      }
+    ],
+    "vo": "This is HerWay. Pick two points and it scores every walking option — lighting, foot traffic, open businesses, community reports — then recommends the safest.",
+    "__focusLog": [
+      {
+        "t": 0.89,
+        "x": 960,
+        "y": 691
+      }
+    ]
+  },
+  {
+    "name": "routes",
+    "session": "app",
+    "actions": [
+      {
+        "type": "click",
+        "sel": "#btnDemo",
+        "__focus": [
+          159.5,
+          326
+        ]
+      },
+      {
+        "type": "waitFor",
+        "sel": ".route-card",
+        "timeout": 15000,
+        "__focus": null
+      },
+      {
+        "type": "wait",
+        "ms": 4200,
+        "__focus": null
+      }
+    ],
+    "vo": "Each candidate route gets a transparent score, so the trade-off between the fastest street and the safest one is a choice the user actually sees.",
+    "__focusLog": [
+      {
+        "t": 5.12,
+        "x": 160,
+        "y": 326
+      }
+    ]
+  },
+  {
+    "name": "time",
+    "session": "app",
+    "actions": [
+      {
+        "type": "fill",
+        "sel": "#timeSlider",
+        "text": "13",
+        "__focus": [
+          1460.890625,
+          27.5
+        ]
+      },
+      {
+        "type": "wait",
+        "ms": 1600,
+        "__focus": null
+      },
+      {
+        "type": "fill",
+        "sel": "#timeSlider",
+        "text": "23",
+        "__focus": [
+          1460.890625,
+          27.5
+        ]
+      },
+      {
+        "type": "wait",
+        "ms": 2400,
+        "__focus": null
+      }
+    ],
+    "vo": "Slide the clock. A plaza that's fine at noon can be a risk at two a.m. — the same streets re-score live because safety isn't static.",
+    "__focusLog": [
+      {
+        "t": 11.49,
+        "x": 1461,
+        "y": 28
+      },
+      {
+        "t": 13.47,
+        "x": 1461,
+        "y": 28
+      }
+    ]
+  },
+  {
+    "name": "model",
+    "session": "app",
+    "duration": 6,
+    "card": {
+      "figma": {
+        "file": "pHHhMPNGFezhSBlCUCvhyo",
+        "node": "8:8",
+        "scale": 2
+      }
+    },
+    "vo": "Under the hood it's four signals — lighting, foot traffic, open-late storefronts, and incident reports — weighted by time of day. Every score explains itself. No black box."
+  },
+  {
+    "name": "report",
+    "session": "app",
+    "actions": [
+      {
+        "type": "click",
+        "sel": "#btnReport",
+        "__focus": [
+          159.5,
+          1047.328125
+        ]
+      },
+      {
+        "type": "exec",
+        "js": "document.getElementById('map').dispatchEvent(new MouseEvent('click',{bubbles:true,clientX:1100,clientY:430}))",
+        "__focus": null
+      },
+      {
+        "type": "waitFor",
+        "sel": "#modalReport:not([hidden])",
+        "__focus": null
+      },
+      {
+        "type": "click",
+        "sel": "button[data-cat='poor_lighting']",
+        "__focus": [
+          849.5,
+          461.40625
+        ]
+      },
+      {
+        "type": "wait",
+        "ms": 500,
+        "__focus": null
+      },
+      {
+        "type": "click",
+        "sel": "#reportSubmit",
+        "__focus": [
+          1112.8125,
+          683.90625
+        ]
+      },
+      {
+        "type": "wait",
+        "ms": 2200,
+        "__focus": null
+      }
+    ],
+    "vo": "Anyone can flag a dark stretch. Every report instantly re-scores the streets around it — the map learns from the community.",
+    "__focusLog": [
+      {
+        "t": 30.66,
+        "x": 160,
+        "y": 1047
+      },
+      {
+        "t": 31.16,
+        "x": 850,
+        "y": 461
+      },
+      {
+        "t": 32.12,
+        "x": 1113,
+        "y": 684
+      }
+    ]
+  },
+  {
+    "name": "safewalk",
+    "session": "app",
+    "actions": [
+      {
+        "type": "click",
+        "sel": "#btnSOS",
+        "__focus": [
+          1840.96875,
+          1030
+        ]
+      },
+      {
+        "type": "waitFor",
+        "sel": ".walker-icon",
+        "__focus": null
+      },
+      {
+        "type": "wait",
+        "ms": 5000,
+        "__focus": null
+      },
+      {
+        "type": "exec",
+        "js": "document.getElementById('swCheckin').hidden=false",
+        "__focus": null
+      },
+      {
+        "type": "wait",
+        "ms": 2600,
+        "__focus": null
+      },
+      {
+        "type": "exec",
+        "js": "document.getElementById('swCheckin').hidden=true",
+        "__focus": null
+      },
+      {
+        "type": "wait",
+        "ms": 1000,
+        "__focus": null
+      }
+    ],
+    "vo": "Safe Walk follows the trip — live ETA, quiet check-ins, and a warning the moment you step into a dark stretch.",
+    "__focusLog": [
+      {
+        "t": 35.78,
+        "x": 1841,
+        "y": 1030
+      }
+    ]
+  },
+  {
+    "name": "sos",
+    "session": "app",
+    "actions": [
+      {
+        "type": "exec",
+        "js": "document.getElementById('swSOS').dispatchEvent(new PointerEvent('pointerdown'))",
+        "__focus": null
+      },
+      {
+        "type": "waitFor",
+        "sel": "#sosOverlay:not([hidden])",
+        "timeout": 8000,
+        "__focus": null
+      },
+      {
+        "type": "wait",
+        "ms": 3200,
+        "__focus": null
+      }
+    ],
+    "vo": "One long press: guardians get your live position, the nearest safe havens, and your street address — ready to read out.",
+    "__focusLog": []
+  },
+  {
+    "name": "fakecall",
+    "session": "app",
+    "actions": [
+      {
+        "type": "click",
+        "sel": "#sosCancel",
+        "__focus": [
+          960,
+          728
+        ]
+      },
+      {
+        "type": "click",
+        "sel": "#swFakeCall",
+        "__focus": [
+          861.5,
+          706.59375
+        ]
+      },
+      {
+        "type": "waitFor",
+        "sel": "#fcIncoming:not([hidden])",
+        "__focus": null
+      },
+      {
+        "type": "wait",
+        "ms": 2000,
+        "__focus": null
+      },
+      {
+        "type": "click",
+        "sel": "#fcAccept",
+        "__focus": [
+          1054,
+          695.5
+        ]
+      },
+      {
+        "type": "wait",
+        "ms": 2800,
+        "__focus": null
+      },
+      {
+        "type": "click",
+        "sel": "#fcEnd",
+        "__focus": [
+          960,
+          728.5
+        ]
+      },
+      {
+        "type": "wait",
+        "ms": 600,
+        "__focus": null
+      },
+      {
+        "type": "click",
+        "sel": "#swClose",
+        "__focus": [
+          1136.5,
+          338.5
+        ]
+      }
+    ],
+    "vo": "And when you just need a way out — one tap, and Mom calls.",
+    "__focusLog": [
+      {
+        "t": 51.34,
+        "x": 960,
+        "y": 728
+      },
+      {
+        "t": 51.84,
+        "x": 862,
+        "y": 707
+      },
+      {
+        "t": 54.29,
+        "x": 1054,
+        "y": 696
+      },
+      {
+        "t": 57.54,
+        "x": 960,
+        "y": 729
+      },
+      {
+        "t": 58.61,
+        "x": 1137,
+        "y": 339
+      }
+    ]
+  },
+  {
+    "name": "roadmap",
+    "session": "app",
+    "duration": 6.5,
+    "pause": 0.6,
+    "card": {
+      "figma": {
+        "file": "pHHhMPNGFezhSBlCUCvhyo",
+        "node": "8:29",
+        "scale": 2
+      }
+    },
+    "vo": "Today it's a seeded demo model that never breaks. Next, real OpenStreetMap and city data — then guardian networks and campus partnerships."
+  },
+  {
+    "name": "cta",
+    "session": "app",
+    "duration": 4.5,
+    "card": {
+      "preset": "dark-premium",
+      "accent": "#a78bfa",
+      "title": "HerWay",
+      "kicker": "SDG 5 · SDG 11",
+      "sub": "Every woman deserves a safe way home",
+      "foot": "herway-tau.vercel.app"
+    },
+    "vo": "Built for SDGs five and eleven — because the walk home shouldn't be a risk calculation."
+  }
+]

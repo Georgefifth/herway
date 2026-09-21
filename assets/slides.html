@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin:0; box-sizing:border-box; }
+  body { font-family:'Inter',system-ui,sans-serif; }
+  .slide { width:1920px; height:1080px; padding:100px 140px; color:#f5f3ff;
+           background:#14101e; position:relative; overflow:hidden;
+           background-image:radial-gradient(ellipse 60% 50% at 85% 15%, #241d3d88, transparent); }
+  .kicker { font-size:26px; font-weight:600; letter-spacing:.32em; margin-bottom:44px; }
+  .violet { color:#a78bfa; } .teal { color:#5eead4; } .dim { color:#9d97b5; }
+
+  /* S1 */
+  .stat { font-size:330px; font-weight:800; line-height:.9; letter-spacing:-.02em; }
+  .uline { width:420px; height:14px; background:#a78bfa; border-radius:7px; margin:44px 0 56px; }
+  .stat-sub { font-size:62px; font-weight:500; line-height:1.25; }
+  .stat-foot { margin-top:56px; font-size:32px; color:#9d97b5; }
+
+  /* S2 */
+  h1 { font-size:88px; font-weight:800; letter-spacing:-.02em; margin:28px 0 20px; }
+  .lede { font-size:36px; color:#9d97b5; margin-bottom:48px; }
+  .brow { display:flex; align-items:center; gap:64px; margin-bottom:36px; }
+  .bname { width:340px; }
+  .bname b { font-size:36px; font-weight:600; display:block; }
+  .bname span { font-size:24px; color:#9d97b5; }
+  .bbar { flex:1; height:40px; background:#2a2440; border-radius:20px; overflow:hidden; }
+  .bbar i { display:block; height:100%; border-radius:22px; }
+  .sfoot { position:absolute; left:140px; bottom:56px; font-size:27px; color:#9d97b5; }
+  .sfoot.flow { position:static; margin-top:36px; }
+
+  /* S3 */
+  .cols { display:flex; gap:40px; margin-top:110px; }
+  .col { flex:1; height:400px; background:#1d1830; border:2px solid #322a52;
+         border-radius:28px; padding:44px; }
+  .col b { font-size:26px; font-weight:600; letter-spacing:.24em; display:block; margin-bottom:36px; }
+  .col p { font-size:32px; line-height:1.45; }
+</style>
+</head>
+<body>
+
+<div class="slide" id="s1">
+  <div class="kicker violet">THE PROBLEM</div>
+  <div class="stat">9 in 10</div>
+  <div class="uline"></div>
+  <div class="stat-sub">of women say street harassment shapes<br>how they walk home</div>
+  <div class="stat-foot">— and most route planners only optimize for speed</div>
+</div>
+
+<div class="slide" id="s2">
+  <div class="kicker teal">HOW IT WORKS</div>
+  <h1>Every score explains itself</h1>
+  <div class="lede">A transparent model — not a black box</div>
+  <div class="brow"><div class="bname"><b>Lighting</b><span>streetlights &amp; dark stretch detection</span></div>
+    <div class="bbar"><i style="width:92%;background:#a78bfa"></i></div></div>
+  <div class="brow"><div class="bname"><b>Foot traffic</b><span>busier streets are safer streets</span></div>
+    <div class="bbar"><i style="width:78%;background:#5eead4"></i></div></div>
+  <div class="brow"><div class="bname"><b>Open late</b><span>lit storefronts as informal safe havens</span></div>
+    <div class="bbar"><i style="width:61%;background:#a78bfa"></i></div></div>
+  <div class="brow"><div class="bname"><b>Incident reports</b><span>community flags re-score nearby streets</span></div>
+    <div class="bbar"><i style="width:45%;background:#5eead4"></i></div></div>
+  <div class="sfoot flow">weights shift with time of day — the same street re-scores at 2am</div>
+</div>
+
+<div class="slide" id="s3">
+  <div class="kicker violet">WHERE THIS GOES</div>
+  <h1 style="font-size:84px">Demo today. City-scale tomorrow.</h1>
+  <div class="cols">
+    <div class="col"><b class="violet">NOW</b><p>Procedural demo model — seeded lighting &amp; traffic data so the demo never breaks</p></div>
+    <div class="col"><b class="teal">NEXT</b><p>Fuse OSM + city open data; real crowd reports with moderation</p></div>
+    <div class="col"><b class="violet">LATER</b><p>Guardian network API · campus &amp; transit partnerships · route share</p></div>
+  </div>
+  <div class="sfoot" style="font-size:34px">For students, night-shift workers, and every woman planning the walk home.</div>
+</div>
+
+</body>
+</html>
