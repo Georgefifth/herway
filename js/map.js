@@ -11,10 +11,10 @@ const MapView = (() => {
     L.control.zoom({ position: "bottomright" }).addTo(map);
     L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}", {
       attribution: 'Esri, HERE, Garmin, &copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> contributors',
-      maxZoom: 19,
+      maxZoom: 19, maxNativeZoom: 16,   // data ends at z16; upscale beyond
     }).addTo(map);
     L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}", {
-      maxZoom: 19, opacity: 0.9,
+      maxZoom: 19, maxNativeZoom: 16, opacity: 0.9,
     }).addTo(map);
     map.setView(center, zoom);
 

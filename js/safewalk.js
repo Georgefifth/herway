@@ -51,7 +51,7 @@ const SafeWalk = (() => {
       swMap = L.map("swMap", { zoomControl: false, attributionControl: false,
                                dragging: false, scrollWheelZoom: false });
       L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
-        { maxZoom: 19 }).addTo(swMap);
+        { maxZoom: 19, maxNativeZoom: 16 }).addTo(swMap);
     }
   }
 
