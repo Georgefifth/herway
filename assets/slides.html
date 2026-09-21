@@ -35,9 +35,37 @@
          border-radius:28px; padding:44px; }
   .col b { font-size:26px; font-weight:600; letter-spacing:.24em; display:block; margin-bottom:36px; }
   .col p { font-size:32px; line-height:1.45; }
+
+  /* S0 cover */
+  .cover-title { font-size:290px; font-weight:800; line-height:.92; letter-spacing:-.03em;
+    color:#f5f3ff; }
+  .cover-title .w { color:#a78bfa; }
+  .cover-tag { font-size:56px; font-weight:400; color:#e6e1f5; margin-top:64px; line-height:1.3; }
+  .cover-tag b { color:#5eead4; font-weight:600; }
+  .cover-foot { position:absolute; left:140px; bottom:72px; display:flex; gap:24px; align-items:center; }
+  .cover-foot .pill { font-size:26px; letter-spacing:.2em; color:#c4b5fd;
+    border:1.5px solid #4a3f78; border-radius:999px; padding:14px 34px; }
+  .cover-routes { position:absolute; right:-90px; bottom:-80px; opacity:.9; }
 </style>
 </head>
 <body>
+
+<div class="slide" id="s0">
+  <svg class="cover-routes" width="900" height="640" viewBox="0 0 900 640" fill="none">
+    <path d="M40 590 C 180 470, 300 430, 400 300 S 620 160, 760 110" stroke="#facc15" stroke-width="10" opacity=".45" stroke-linecap="round"/>
+    <path d="M40 590 C 220 560, 380 480, 460 330 S 660 170, 800 120" stroke="#34d399" stroke-width="13" stroke-linecap="round"/>
+    <circle cx="40" cy="590" r="19" fill="#5eead4" stroke="#14101e" stroke-width="6"/>
+    <circle cx="800" cy="120" r="19" fill="#f472b6" stroke="#14101e" stroke-width="6"/>
+  </svg>
+  <div class="kicker violet">ACODEMIC × G.I.R.L.S. · GLOBAL SDG HACKATHON</div>
+  <div class="cover-title">Her<span class="w">Way</span></div>
+  <div class="cover-tag">Not the fastest way home.<br><b>The safest one.</b></div>
+  <div class="cover-foot">
+    <div class="pill">SDG 5 · GENDER EQUALITY</div>
+    <div class="pill">SDG 11 · SAFER CITIES</div>
+    <div class="pill" style="color:#5eead4;border-color:#1f5c53">herway-tau.vercel.app</div>
+  </div>
+</div>
 
 <div class="slide" id="s1">
   <div class="kicker violet">THE PROBLEM</div>
