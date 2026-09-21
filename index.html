@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HerWay — Safety-aware routes for every walk home</title>
+<meta name="description" content="HerWay scores walking routes by lighting, foot traffic, open businesses and community reports — so every woman can choose the safest way home. Built for SDG 5 & 11." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◈</text></svg>" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<!-- ══════════ Top bar ══════════ -->
+<header id="topbar">
+  <div class="brand">
+    <span class="brand-mark">◈</span>
+    <span class="brand-name">HerWay</span>
+    <span class="brand-tag">safe routes for every walk home</span>
+  </div>
+
+  <div class="topbar-controls">
+    <label class="city-picker">
+      <span>City</span>
+      <select id="citySelect">
+        <option value="nyc">New York</option>
+        <option value="toronto">Toronto</option>
+        <option value="london">London</option>
+        <option value="mumbai">Mumbai</option>
+        <option value="singapore">Singapore</option>
+        <option value="custom" disabled>My location…</option>
+      </select>
+    </label>
+
+    <div class="time-control" title="Safety factors change with time of day">
+      <span class="time-icon" id="timeIcon">🌙</span>
+      <input type="range" id="timeSlider" min="0" max="23" value="22" />
+      <span class="time-label" id="timeLabel">22:00</span>
+    </div>
+
+    <button class="btn ghost" id="btnHow">How scoring works</button>
+    <button class="btn ghost" id="btnLearn">Why it matters</button>
+  </div>
+</header>
+
+<div id="layout">
+
+  <!-- ══════════ Sidebar ══════════ -->
+  <aside id="sidebar">
+
+    <section class="panel">
+      <h2>Plan a safe route</h2>
+      <div class="field">
+        <label>From</label>
+        <div class="field-row">
+          <input id="fromInput" type="text" placeholder="Start point…" autocomplete="off" />
+          <button class="icon-btn" id="fromPick" title="Pick on map">📍</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>To</label>
+        <div class="field-row">
+          <input id="toInput" type="text" placeholder="Destination…" autocomplete="off" />
+          <button class="icon-btn" id="toPick" title="Pick on map">📍</button>
+        </div>
+      </div>
+      <button class="btn primary full" id="btnRoute">Find safest route</button>
+      <button class="btn ghost full small" id="btnDemo">Try a demo trip</button>
+      <p class="hint" id="routeHint">Tip: drag the markers or click “📍” then the map.</p>
+    </section>
+
+    <section class="panel" id="routeResults" hidden>
+      <h2>Route options</h2>
+      <div id="routeList"></div>
+      <div id="routeBreakdown" class="breakdown" hidden></div>
+    </section>
+
+    <section class="panel">
+      <h2>Map layers</h2>
+      <label class="toggle"><input type="checkbox" id="layerHeat" checked /> Safety heatmap</label>
+      <label class="toggle"><input type="checkbox" id="layerHavens" checked /> Safe havens</label>
+      <label class="toggle"><input type="checkbox" id="layerReports" checked /> Community reports</label>
+      <div class="legend">
+        <div><i class="dot good"></i> safer</div>
+        <div><i class="dot mid"></i> caution</div>
+        <div><i class="dot bad"></i> avoid after dark</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Community</h2>
+      <button class="btn accent full" id="btnReport">＋ Report a spot</button>
+      <p class="hint">Your reports re-score nearby streets for everyone.</p>
+      <div id="reportStats" class="stats"></div>
+      <ul id="recentReports" class="report-list"></ul>
+    </section>
+
+    <footer class="sidebar-footer">
+      <span class="sdg-badge">SDG 5 · Gender Equality</span>
+      <span class="sdg-badge">SDG 11 · Sustainable Cities</span>
+    </footer>
+  </aside>
+
+  <!-- ══════════ Map ══════════ -->
+  <main id="mapWrap">
+    <div id="map"></div>
+    <button id="btnSOS" class="sos-btn" title="Open Safe Walk companion">Safe&nbsp;Walk</button>
+    <div id="pickBanner" class="pick-banner" hidden>Click the map to set <b id="pickTarget"></b> — <button id="pickCancel">cancel</button></div>
+    <div id="datasetChip" class="dataset-chip" title="Demo dataset: procedural model + community reports. Production fuses OSM, city open data and live reports.">demo data</div>
+  </main>
+</div>
+
+<!-- ══════════ Modals ══════════ -->
+<div class="modal-backdrop" id="modalBackdrop" hidden>
+
+  <div class="modal" id="modalReport" hidden>
+    <h3>Report this spot</h3>
+    <p class="muted">Your report updates the safety score for everyone.</p>
+    <div class="report-cats" id="reportCats">
+      <button data-cat="poor_lighting" data-delta="-14">🔦 Poorly lit</button>
+      <button data-cat="harassment"   data-delta="-22">⚠️ Harassment reported</button>
+      <button data-cat="isolated"     data-delta="-12">🌳 Isolated / deserted</button>
+      <button data-cat="feels_safe"   data-delta="+12">💚 Feels safe</button>
+      <button data-cat="busy_night"   data-delta="+8">🧑‍🤝‍🧑 Busy at night</button>
+      <button data-cat="open_late"    data-delta="+6">🏪 Open late nearby</button>
+    </div>
+    <textarea id="reportNote" maxlength="140" placeholder="Optional note (kept on this device)"></textarea>
+    <div class="modal-actions">
+      <button class="btn ghost" data-close>Cancel</button>
+      <button class="btn primary" id="reportSubmit" disabled>Submit report</button>
+    </div>
+  </div>
+
+  <div class="modal" id="modalHow" hidden>
+    <h3>How HerWay scores a route</h3>
+    <p>Every street segment gets a <b>Safety Score (0–100)</b> from transparent factors — no black box:</p>
+    <ul class="how-list">
+      <li>🔦 <b>Street lighting</b> — matters most after dark</li>
+      <li>🧑‍🤝‍🧑 <b>Foot traffic</b> — busy streets deter harassment</li>
+      <li>🏪 <b>Open businesses</b> — “eyes on the street”, open-late weighted at night</li>
+      <li>⚠️ <b>Incident reports</b> — community reports push scores down</li>
+      <li>🛟 <b>Safe havens</b> — police, hospitals, 24h stores nearby push scores up</li>
+    </ul>
+    <p>Move the <b>time-of-day slider</b> and watch the same street change score — a well-lit plaza at noon can be a risk at 2am.</p>
+    <p class="muted small">Demo build: factors come from a procedural model + your reports. Production would fuse OpenStreetMap, municipal open data and live community reports.</p>
+    <div class="modal-actions"><button class="btn primary" data-close>Got it</button></div>
+  </div>
+
+  <div class="modal" id="modalLearn" hidden>
+    <h3>Why HerWay exists</h3>
+    <p><b>9 in 10 women</b> in cities worldwide report experiencing street harassment — and most say it shapes which routes they walk, when they leave, and whether they go at all.</p>
+    <p>HerWay turns scattered community knowledge into a <b>routing decision</b>: not the fastest way home — the safest one.</p>
+    <ul class="how-list">
+      <li><b>SDG 5 — Gender Equality:</b> freedom of movement without fear is a prerequisite for equal access to education, work and public life.</li>
+      <li><b>SDG 11 — Sustainable Cities:</b> crowdsourced reports surface exactly where lighting, policing and urban design fail — data cities can act on.</li>
+    </ul>
+    <div class="modal-actions"><button class="btn primary" data-close>Got it</button></div>
+  </div>
+</div>
+
+<!-- ══════════ Safe Walk overlay ══════════ -->
+<div id="safeWalk" hidden>
+  <div class="sw-card">
+    <header class="sw-head">
+      <div><b>Safe Walk</b><span id="swStatus">walking…</span></div>
+      <button class="icon-btn" id="swClose" title="End walk">✕</button>
+    </header>
+    <div class="sw-mapwrap"><div id="swMap"></div></div>
+    <div class="sw-stats">
+      <div><span id="swETA">—</span><label>arriving</label></div>
+      <div><span id="swDist">—</span><label>remaining</label></div>
+      <div><span id="swGuardians">2</span><label>guardians</label></div>
+    </div>
+    <div class="sw-checkin" id="swCheckin" hidden>
+      <p>Everything okay?</p>
+      <div>
+        <button class="btn primary" id="swImOk">I'm OK</button>
+        <span class="sw-count" id="swCountdown">20s</span>
+      </div>
+    </div>
+    <button class="sos-hold" id="swSOS"><span>Hold for SOS</span><i id="swSOSFill"></i></button>
+  </div>
+</div>
+
+<!-- ══════════ SOS overlay ══════════ -->
+<div id="sosOverlay" hidden>
+  <div class="sos-card">
+    <h2>🆘 SOS activated</h2>
+    <p id="sosMsg">Guardians notified · location shared (simulated)</p>
+    <div class="sos-havens" id="sosHavens"></div>
+    <div class="sos-emergency">
+      <p class="muted">If you are in danger, call local emergency services:</p>
+      <div class="sos-nums" id="sosNums"></div>
+    </div>
+    <button class="btn ghost full" id="sosCancel">I'm safe — cancel alert</button>
+  </div>
+</div>
+
+<!-- ══════════ Intro splash ══════════ -->
+<div id="splash">
+  <div class="splash-card">
+    <div class="brand big"><span class="brand-mark">◈</span> HerWay</div>
+    <p class="splash-tag">Not the fastest way home. <b>The safest one.</b></p>
+    <p class="splash-copy">HerWay scores every walking route by lighting, foot traffic, open businesses and community reports — and walks with you until you're home.</p>
+    <ul class="splash-feats">
+      <li>🗺️ Routes ranked by a transparent Safety Score</li>
+      <li>🌙 Scores change with time of day</li>
+      <li>📍 Crowdsourced reports reshape the map</li>
+      <li>🛟 Safe Walk companion + one-hold SOS</li>
+    </ul>
+    <button class="btn primary big" id="splashGo">Open the map →</button>
+    <p class="splash-sdg">Aligned with UN SDG 5 (Gender Equality) & SDG 11 (Sustainable Cities)</p>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="js/data.js"></script>
+<script src="js/safety.js"></script>
+<script src="js/routing.js"></script>
+<script src="js/map.js"></script>
+<script src="js/reports.js"></script>
+<script src="js/safewalk.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
