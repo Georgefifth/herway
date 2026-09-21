@@ -70,9 +70,16 @@
       return;
     }
     btn.classList.add("busy");
+    let done = false;
+    const finish = () => { done = true; btn.classList.remove("busy"); };
+    // watchdog: browsers can leave the callback hanging while a permission
+    // prompt sits unanswered (or in headless contexts)
+    const watchdog = setTimeout(() => {
+      if (!done) { finish(); SafeWalk.toast("Location request timed out — try again"); }
+    }, 12000);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        btn.classList.remove("busy");
+        if (done) return; finish(); clearTimeout(watchdog);
         const ll = [pos.coords.latitude, pos.coords.longitude];
         switchCity(Data.customCity(ll[0], ll[1]));
         $("citySelect").value = "custom";
@@ -80,7 +87,7 @@
         SafeWalk.toast("Located — safety model recalibrated to your area (demo)");
       },
       (err) => {
-        btn.classList.remove("busy");
+        if (done) return; finish(); clearTimeout(watchdog);
         $("citySelect").value = state.city.key;
         SafeWalk.toast({
           1: "Location permission denied — allow it in the browser address bar",
