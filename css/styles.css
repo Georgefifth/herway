@@ -48,6 +48,20 @@ h3{font-size:1.05rem;margin-bottom:8px}
 .field label{display:block;font-size:.75rem;color:var(--muted);margin-bottom:4px}
 .field-row{display:flex;gap:6px}
 .field-row input{flex:1;min-width:0}
+.ac-wrap{position:relative;flex:1;min-width:0}
+.ac-list{position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:700;
+  list-style:none;background:var(--panel);border:1px solid var(--accent);
+  border-radius:10px;overflow:hidden;box-shadow:0 12px 30px rgba(0,0,0,.55);
+  max-height:230px;overflow-y:auto}
+.ac-list li{padding:9px 12px;font-size:.8rem;cursor:pointer;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.ac-list li:first-child{border-top:none}
+.ac-list li:hover,.ac-list li.active{background:rgba(167,139,250,.15)}
+.ac-list .ac-name{font-weight:600;flex-shrink:1;min-width:0;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.ac-list .ac-sub{color:var(--muted);font-size:.68rem;flex-shrink:0;max-width:45%;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ac-list li.ac-note{cursor:default;color:var(--muted);justify-content:center}
 .icon-btn{border:1px solid var(--line);border-radius:8px;padding:6px 9px;background:var(--bg2)}
 .icon-btn:hover{border-color:var(--accent)}
 .btn{border-radius:10px;padding:9px 14px;font-weight:600;font-size:.88rem;

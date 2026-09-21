@@ -128,28 +128,94 @@
     if (state.routes.length) plan(); // live re-route on drag
   }
 
-  async function geocode(q) {
-    const b = map.getBounds();
-    const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1` +
+  /* ── place search, biased + resorted by distance to map center ── */
+  const COORD_RE = /^(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)$/;
+  const debounce = (fn, ms) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
+
+  async function searchPlaces(q, signal) {
+    const b = map.getBounds(), c = map.getCenter();
+    const url = `https://nominatim.openstreetmap.org/search?format=json&limit=7` +
       `&viewbox=${b.getWest()},${b.getNorth()},${b.getEast()},${b.getSouth()}` +
       `&q=${encodeURIComponent(q)}`;
-    const res = await fetch(url, { headers: { "Accept-Language": "en" } });
+    const res = await fetch(url, { headers: { "Accept-Language": "en" }, signal });
     const j = await res.json();
-    if (!j.length) throw new Error("not found");
-    return [parseFloat(j[0].lat), parseFloat(j[0].lon)];
+    return j.map(r => ({ lat: +r.lat, lng: +r.lon, name: r.display_name }))
+      .sort((a, z) => Math.hypot(a.lat - c.lat, a.lng - c.lng) - Math.hypot(z.lat - c.lat, z.lng - c.lng));
+  }
+
+  /* autocomplete dropdown on an endpoint input */
+  function attachAutocomplete(which) {
+    const input = $(which + "Input"), list = $(which + "List");
+    let items = [], active = -1, ctrl = null;
+
+    const hide = () => { list.hidden = true; items = []; active = -1; };
+    const pick = (i) => {
+      const it = items[i];
+      if (!it) return;
+      hide();
+      setEndpoint(which, [it.lat, it.lng], it.name.split(",").slice(0, 2).join(","));
+      input.dataset.resolved = "1";   // don't re-geocode this label
+    };
+    const distLabel = (it) => {
+      const c = map.getCenter();
+      const km = Safety.distM([it.lat, it.lng], [c.lat, c.lng]) / 1000;
+      return km >= 1 ? Math.round(km) + " km" : Math.round(km * 1000) + " m";
+    };
+    const render = () => {
+      list.innerHTML = items.length
+        ? items.map((it, i) => {
+            const [name, ...rest] = it.name.split(",");
+            return `<li data-i="${i}" class="${i === active ? "active" : ""}">
+              <span class="ac-name">${name.trim()}</span>
+              <span class="ac-sub">${rest.slice(0, 2).join(",").trim()} · ${distLabel(it)}</span></li>`;
+          }).join("")
+        : `<li class="ac-note">No matches nearby — try more words or 📍 pick on map</li>`;
+      list.hidden = false;
+      list.querySelectorAll("li[data-i]").forEach(li =>
+        li.onmousedown = (e) => { e.preventDefault(); pick(+li.dataset.i); });
+    };
+
+    input.addEventListener("input", debounce(async () => {
+      const q = input.value.trim();
+      input.dataset.resolved = "";
+      if (q.length < 3 || COORD_RE.test(q)) { hide(); return; }
+      ctrl?.abort(); ctrl = new AbortController();
+      list.innerHTML = `<li class="ac-note">Searching…</li>`;
+      list.hidden = false;
+      try {
+        items = await searchPlaces(q, ctrl.signal);
+        active = items.length ? 0 : -1;
+        render();
+      } catch (e) { if (e.name !== "AbortError") hide(); }
+    }, 350));
+
+    input.addEventListener("keydown", (e) => {
+      if (list.hidden || !items.length) {
+        if (e.key === "Enter") resolveInput(which);
+        return;
+      }
+      if (e.key === "ArrowDown") { active = (active + 1) % items.length; render(); e.preventDefault(); }
+      else if (e.key === "ArrowUp") { active = (active - 1 + items.length) % items.length; render(); e.preventDefault(); }
+      else if (e.key === "Enter") { pick(active < 0 ? 0 : active); e.preventDefault(); }
+      else if (e.key === "Escape") hide();
+    });
+    input.addEventListener("blur", () => setTimeout(hide, 150));
   }
 
   async function resolveInput(which) {
-    const v = $(which + "Input").value.trim();
+    const input = $(which + "Input");
+    const v = input.value.trim();
     if (!v) return null;
-    const m = v.match(/^(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)$/);
+    if (input.dataset.resolved === "1" && state[which]) return state[which];
+    const m = v.match(COORD_RE);
     if (m) { const ll = [+m[1], +m[2]]; setEndpoint(which, ll, v); return ll; }
     try {
-      const ll = await geocode(v);
-      setEndpoint(which, ll, v);
-      return ll;
+      const hits = await searchPlaces(v);
+      if (!hits.length) throw new Error("not found");
+      setEndpoint(which, [hits[0].lat, hits[0].lng], hits[0].name.split(",").slice(0, 2).join(","));
+      input.dataset.resolved = "1";
+      return state[which];
     } catch (e) {
-      $(which + "Input").value = "";
       hint(`Couldn't find “${v}” — click 📍 to drop a pin instead.`);
       return null;
     }
@@ -190,6 +256,12 @@
     const from = state.from || await resolveInput("from");
     const to = state.to || await resolveInput("to");
     if (!from || !to) { hint("Set a start and destination first."); return; }
+
+    const gapKm = Safety.distM(from, to) / 1000;
+    if (gapKm > 30) {
+      hint(`⚠ Those points are ${Math.round(gapKm).toLocaleString()} km apart — HerWay plans walks, so both points must be near each other. Did a search hit the wrong country? Check the pins on the map.`);
+      return;
+    }
 
     hint("Routing…");
     const raw = await Routing.getRoutes(from, to);
@@ -272,8 +344,8 @@
     setEndpoint("to", t, "Demo destination");
     plan();
   };
-  $("fromInput").addEventListener("keydown", e => { if (e.key === "Enter") resolveInput("from"); });
-  $("toInput").addEventListener("keydown", e => { if (e.key === "Enter") resolveInput("to"); });
+  attachAutocomplete("from");
+  attachAutocomplete("to");
 
   /* ─────────── layers ─────────── */
   $("layerHeat").onchange = e => MapView.toggleLayer("heat", e.target.checked);

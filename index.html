@@ -54,14 +54,20 @@
       <div class="field">
         <label>From</label>
         <div class="field-row">
-          <input id="fromInput" type="text" placeholder="Start point…" autocomplete="off" />
+          <div class="ac-wrap">
+            <input id="fromInput" type="text" placeholder="Start point…" autocomplete="off" />
+            <ul class="ac-list" id="fromList" hidden></ul>
+          </div>
           <button class="icon-btn" id="fromPick" title="Pick on map">📍</button>
         </div>
       </div>
       <div class="field">
         <label>To</label>
         <div class="field-row">
-          <input id="toInput" type="text" placeholder="Destination…" autocomplete="off" />
+          <div class="ac-wrap">
+            <input id="toInput" type="text" placeholder="Destination…" autocomplete="off" />
+            <ul class="ac-list" id="toList" hidden></ul>
+          </div>
           <button class="icon-btn" id="toPick" title="Pick on map">📍</button>
         </div>
       </div>
