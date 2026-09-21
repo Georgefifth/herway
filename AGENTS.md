@@ -51,7 +51,9 @@ js/safety.js      Route scoring model (lighting/traffic/crime/open-late, time-we
 js/routing.js     OSRM fetch + fallback route generator
 js/map.js         Leaflet setup, heat overlay, route rendering, markers
 js/reports.js     Crowdsourced reports (pin + category + localStorage)
-js/safewalk.js    "Walk With Me" companion: simulated trip, check-ins, SOS
+js/fakecall.js    Fake incoming call (WebAudio ring, timed call screen)
+js/safewalk.js    "Walk With Me" companion: simulated trip, check-ins,
+                  danger-zone alerts, share link, SOS + reverse-geocoded location
 js/app.js         UI wiring, state, geocoding, city selector
 ```
 

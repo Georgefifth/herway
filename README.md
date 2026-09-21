@@ -32,6 +32,15 @@ deserted, or flagged by the community — and routed around them?**
 - 🚶‍♀️ **Safe Walk companion** — live trip view with ETA, periodic "Everything
   okay?" check-ins, and a **hold-to-SOS** that lists your nearest safe havens
   and local emergency numbers.
+- ⚠️ **Danger-zone alerts** — while walking, HerWay warns you the moment you
+  enter a low-score area and points you to the nearest safe haven.
+- 📞 **Fake call** — one tap simulates an incoming call ("Mom") with ringtone,
+  a live call screen and conversation prompts — the classic, discreet way out
+  of an uncomfortable situation.
+- 🔗 **Share your walk** — copy a live-tracking link for your guardians
+  (simulated).
+- 📍 **Speakable location** — SOS reads out your nearest street address via
+  reverse geocoding, so you can tell a dispatcher exactly where you are.
 - 🔍 **No black box** — every score shows its breakdown (lighting / foot
   traffic / open late / incident risk), because trust needs transparency.
 

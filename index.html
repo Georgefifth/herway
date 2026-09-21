@@ -167,10 +167,15 @@
       <button class="icon-btn" id="swClose" title="End walk">✕</button>
     </header>
     <div class="sw-mapwrap"><div id="swMap"></div></div>
+    <div class="sw-danger" id="swDanger" hidden></div>
     <div class="sw-stats">
       <div><span id="swETA">—</span><label>arriving</label></div>
       <div><span id="swDist">—</span><label>remaining</label></div>
       <div><span id="swGuardians">2</span><label>guardians</label></div>
+    </div>
+    <div class="sw-actions">
+      <button class="sw-tool" id="swFakeCall" title="Simulate an incoming call to exit a situation">📞 Fake call</button>
+      <button class="sw-tool" id="swShare" title="Copy a live-tracking link for your guardians">🔗 Share walk</button>
     </div>
     <div class="sw-checkin" id="swCheckin" hidden>
       <p>Everything okay?</p>
@@ -183,11 +188,42 @@
   </div>
 </div>
 
+<!-- ══════════ Fake call overlay ══════════ -->
+<div id="fakeCall" hidden>
+  <div class="fc-screen" id="fcIncoming">
+    <div class="fc-avatar">M</div>
+    <div class="fc-name">Mom</div>
+    <div class="fc-sub">mobile · HerWay Fake Call</div>
+    <div class="fc-btns">
+      <button class="fc-btn decline" id="fcDecline"><i>✕</i><label>Decline</label></button>
+      <button class="fc-btn accept" id="fcAccept"><i>✓</i><label>Accept</label></button>
+    </div>
+  </div>
+  <div class="fc-screen" id="fcInCall" hidden>
+    <div class="fc-avatar small">M</div>
+    <div class="fc-name">Mom</div>
+    <div class="fc-timer" id="fcTimer">00:00</div>
+    <p class="fc-script" id="fcScript">Say: “I’m almost there — five minutes.”</p>
+    <div class="fc-grid">
+      <span class="fc-g">🔇<label>mute</label></span>
+      <span class="fc-g">⌨️<label>keypad</label></span>
+      <span class="fc-g">🔊<label>speaker</label></span>
+      <span class="fc-g">＋<label>add call</label></span>
+      <span class="fc-g">📹<label>video</label></span>
+      <span class="fc-g">👤<label>contacts</label></span>
+    </div>
+    <button class="fc-btn decline big" id="fcEnd"><i>✕</i><label>End</label></button>
+  </div>
+</div>
+
+<div id="toast" hidden></div>
+
 <!-- ══════════ SOS overlay ══════════ -->
 <div id="sosOverlay" hidden>
   <div class="sos-card">
     <h2>🆘 SOS activated</h2>
     <p id="sosMsg">Guardians notified · location shared (simulated)</p>
+    <p id="sosLoc" class="sos-loc"></p>
     <div class="sos-havens" id="sosHavens"></div>
     <div class="sos-emergency">
       <p class="muted">If you are in danger, call local emergency services:</p>
@@ -221,6 +257,7 @@
 <script src="js/routing.js"></script>
 <script src="js/map.js"></script>
 <script src="js/reports.js"></script>
+<script src="js/fakecall.js"></script>
 <script src="js/safewalk.js"></script>
 <script src="js/app.js"></script>
 </body>

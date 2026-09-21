@@ -66,9 +66,20 @@
   /* ─────────── endpoints ─────────── */
   function setEndpoint(which, latlng, label) {
     state[which] = latlng;
-    $(which + "Input").value = label ||
-      `${latlng[0].toFixed(4)}, ${latlng[1].toFixed(4)}`;
+    const input = $(which + "Input");
+    input.value = label || `${latlng[0].toFixed(4)}, ${latlng[1].toFixed(4)}`;
     MapView.setEndpoints(state.from, state.to, onEndpointDrag);
+    // fill in a human-readable street name when possible
+    if (!label) {
+      fetch(`https://nominatim.openstreetmap.org/reverse?format=json` +
+            `&lat=${latlng[0]}&lon=${latlng[1]}&zoom=17`,
+            { headers: { "Accept-Language": "en" } })
+        .then(r => r.json())
+        .then(j => {
+          if (j.display_name && state[which] === latlng)
+            input.value = j.display_name.split(",").slice(0, 2).join(",");
+        }).catch(() => {});
+    }
   }
   function onEndpointDrag(which, ll) {
     state[which] = [ll.lat, ll.lng];
@@ -285,6 +296,7 @@
   $("btnLearn").onclick = () => openModal("modalLearn");
 
   /* ─────────── Safe Walk ─────────── */
+  FakeCall.init();
   SafeWalk.init({ onSOSCancel: () => {} });
   $("btnSOS").onclick = async () => {
     let route = state.routes[state.selected];
@@ -295,7 +307,8 @@
       route = { coords: raw[0].coords };
       state.routes = raw.map(r => ({ coords: r.coords })); rescore();
     }
-    SafeWalk.start(route, state.city, () => SafeWalk.showSOS(state.city, state.havens));
+    SafeWalk.start(route, state.city, state.hour, state.reports, state.havens,
+      () => SafeWalk.showSOS(state.city, state.havens));
   };
   document.addEventListener("keydown", e => {
     if (e.key === "Escape") { closeModals(); endPick(); }

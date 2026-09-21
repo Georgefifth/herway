@@ -169,6 +169,49 @@ h3{font-size:1.05rem;margin-bottom:8px}
 .sos-hold i{position:absolute;inset:0;width:0%;background:rgba(248,113,113,.85);transition:width .05s linear}
 .sos-hold.armed{color:#fff}
 
+.sw-actions{display:flex;gap:8px;margin:0 16px 10px}
+.sw-tool{flex:1;border:1px solid var(--line);border-radius:10px;padding:9px;
+  font-size:.8rem;color:var(--muted);background:var(--bg2);transition:.12s}
+.sw-tool:hover{border-color:var(--accent);color:var(--ink)}
+.sw-danger{margin:0 16px 10px;border:1px solid var(--mid);border-radius:10px;
+  background:rgba(251,191,36,.1);padding:8px 12px;font-size:.78rem;line-height:1.45}
+.sw-danger b{color:var(--mid)}
+
+/* ── toast ── */
+#toast{position:fixed;left:50%;bottom:34px;transform:translateX(-50%);z-index:980;
+  background:var(--panel);border:1px solid var(--accent);border-radius:24px;
+  padding:10px 20px;font-size:.85rem;box-shadow:0 8px 24px rgba(0,0,0,.5);
+  animation:toastIn .25s ease-out}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
+
+/* ── fake call ── */
+#fakeCall{position:fixed;inset:0;z-index:970;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(160deg,#1c1030 0%,#0b0f16 70%);padding:16px}
+.fc-screen{width:min(360px,100%);min-height:480px;display:flex;flex-direction:column;
+  align-items:center;justify-content:space-between;padding:48px 24px 40px;text-align:center}
+.fc-avatar{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,#f472b6,#a78bfa);
+  display:flex;align-items:center;justify-content:center;font-size:2.6rem;font-weight:800;color:#fff;
+  animation:fcPulse 1.6s infinite}
+.fc-avatar.small{width:72px;height:72px;font-size:2rem;animation:none}
+@keyframes fcPulse{50%{box-shadow:0 0 0 18px rgba(167,139,250,.08)}}
+.fc-name{font-size:1.7rem;font-weight:700;margin-top:14px}
+.fc-sub{color:var(--muted);font-size:.82rem;margin-top:6px}
+.fc-btns{display:flex;justify-content:space-between;width:100%;padding:0 30px;margin-top:auto}
+.fc-btn{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--muted);font-size:.75rem}
+.fc-btn i{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;font-style:normal;color:#fff}
+.fc-btn.decline i{background:#ef4444;transform:rotate(135deg)}
+.fc-btn.accept i{background:#22c55e;animation:fcShake 1s infinite}
+.fc-btn.big i{width:70px;height:70px}
+@keyframes fcShake{0%,100%{transform:rotate(0)}10%,30%{transform:rotate(-14deg)}20%,40%{transform:rotate(14deg)}}
+.fc-timer{font-size:1.05rem;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:6px}
+.fc-script{margin-top:18px;font-size:.85rem;color:var(--accent2);background:rgba(103,232,249,.08);
+  border:1px solid rgba(103,232,249,.3);border-radius:10px;padding:8px 14px}
+.fc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 30px;margin:26px 0}
+.fc-g{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:1.3rem;color:var(--muted)}
+.fc-g label{font-size:.62rem}
+.sos-loc{font-size:.82rem;color:#fecaca;margin-top:6px}
+
 /* ── SOS overlay ── */
 #sosOverlay{position:fixed;inset:0;z-index:950;background:rgba(60,6,10,.92);
   display:flex;align-items:center;justify-content:center;padding:16px}
