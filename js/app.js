@@ -133,14 +133,17 @@
   const debounce = (fn, ms) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
 
   async function searchPlaces(q, signal) {
-    const b = map.getBounds(), c = map.getCenter();
-    const url = `https://nominatim.openstreetmap.org/search?format=json&limit=7` +
-      `&viewbox=${b.getWest()},${b.getNorth()},${b.getEast()},${b.getSouth()}` +
+    // anchor on the selected city / geolocated position — NOT map.getCenter(),
+    // which can drift to mid-ocean after fitBounds on a bad route
+    const c = state.city.center;
+    const pad = 0.9;   // ~100 km box: a walking app never needs farther
+    const url = `https://nominatim.openstreetmap.org/search?format=json&limit=15&bounded=1` +
+      `&viewbox=${c[1] - pad},${c[0] + pad},${c[1] + pad},${c[0] - pad}` +
       `&q=${encodeURIComponent(q)}`;
     const res = await fetch(url, { headers: { "Accept-Language": "en" }, signal });
     const j = await res.json();
     return j.map(r => ({ lat: +r.lat, lng: +r.lon, name: r.display_name }))
-      .sort((a, z) => Math.hypot(a.lat - c.lat, a.lng - c.lng) - Math.hypot(z.lat - c.lat, z.lng - c.lng));
+      .sort((a, z) => Math.hypot(a.lat - c[0], a.lng - c[1]) - Math.hypot(z.lat - c[0], z.lng - c[1]));
   }
 
   /* autocomplete dropdown on an endpoint input */
@@ -157,8 +160,8 @@
       input.dataset.resolved = "1";   // don't re-geocode this label
     };
     const distLabel = (it) => {
-      const c = map.getCenter();
-      const km = Safety.distM([it.lat, it.lng], [c.lat, c.lng]) / 1000;
+      const c = state.city.center;
+      const km = Safety.distM([it.lat, it.lng], [c[0], c[1]]) / 1000;
       return km >= 1 ? Math.round(km) + " km" : Math.round(km * 1000) + " m";
     };
     const render = () => {
@@ -169,7 +172,7 @@
               <span class="ac-name">${name.trim()}</span>
               <span class="ac-sub">${rest.slice(0, 2).join(",").trim()} · ${distLabel(it)}</span></li>`;
           }).join("")
-        : `<li class="ac-note">No matches nearby — try more words or 📍 pick on map</li>`;
+        : `<li class="ac-note">No matches within ~100 km — try more words or 📍 pick on map</li>`;
       list.hidden = false;
       list.querySelectorAll("li[data-i]").forEach(li =>
         li.onmousedown = (e) => { e.preventDefault(); pick(+li.dataset.i); });
